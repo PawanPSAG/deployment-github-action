@@ -26,7 +26,7 @@ jobs:
 
       - name: Deploy to Sandbox
         run: |
-          ssh ${{secret.SFDC_USERNAME_DEVELOPER_ORG}} ''
+          ssh ${{ secrets.SFDC_USERNAME_DEVELOPER_ORG }}''
            # Add your deployment commands here
            # For example, if deploying to a server, use SSH or other deployment tools.
            # If deploying to a cloud service, use the respective CLI.
