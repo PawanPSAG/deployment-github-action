@@ -11,16 +11,23 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
 
-      - name: Authenticate with Salesforce Sandbox
-      run: |
-        echo "${{ secrets.JWT_PRIVATE_KEY }}" > server.key
-        sfdx force:auth:jwt:grant --clientid ${{ secrets.SFDC_CONSUMER_KEY_DEVELOPER_ORG }} --jwtkeyfile ./server.key --username ${{ secrets.SFDC_USERNAME_DEVELOPER_ORG }} --instanceurl ${{ secrets.SFDC_SANDBOX_URL }} --setdefaultdevhubusername -a sandbox
-        
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
       - name: Deploy to Sandbox
         run: |
+          # Add your deployment commands here
           sfdx force:source:deploy -u sandbox -p force-app/main/default
-           # Add your deployment commands here
-           # For example, if deploying to a server, use SSH or other deployment tools.
-           # If deploying to a cloud service, use the respective CLI.
+
+          # For example, if deploying to a server, use SSH or other deployment tools.
+          # If deploying to a cloud service, use the respective CLI.
