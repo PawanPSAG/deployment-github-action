@@ -22,7 +22,15 @@ jobs:
           ACCESS_TOKEN=$(curl -d "grant_type=password" -d "client_id=${{ secrets.SFDC_CONSUMER_KEY_DEVELOPER_ORG }}" -d "client_secret=${{ secrets.SFDC_CONSUMER_KEY_DEVELOPER_ORG }}" -d "username=${{ secrets.SFDC_USERNAME_DEVELOPER_ORG }}" -d "password=${{ secrets.SFDC_PASSWORD_DEVELOPER_ORG }}${{ secrets.SFDC_SECURITY_TOKEN_DEVELOPER_ORG }}" ${{ secrets.SFDC_SANDBOX_URL }}/services/oauth2/token | jq -r .access_token)
 
           echo "::set-output name=ACCESS_TOKEN::$ACCESS_TOKEN"
-          
+
       - name: Deploy to Salesforce Sandbox
         run: sfdx force:source:deploy -u sfdc-sandbox -p force-app/main/default
+
+      - name: Run Tests in Sandbox
+      run: |
+        sfdx force:apex:test:run -u sandbox
+
+    - name: Disconnect from Sandbox
+      run: |
+        sfdx force:auth:logout -u sandbox  
 
