@@ -13,17 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 14
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build
-        run: npm run build
-
       - name: Deploy to Sandbox
         run: |
           ssh ${{ secrets.SFDC_USERNAME_DEVELOPER_ORG }} '/Users/pawankumar/Documents/Project/deployment-github-action/manifest/package.xml'
