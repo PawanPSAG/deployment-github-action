@@ -6,7 +6,7 @@ on:
       - Developer
 
 jobs:
-  deploy:
+  Build:
     runs-on: ubuntu-latest
 
     - name: Install the SFDX CLI
