@@ -15,7 +15,8 @@ jobs:
 
       - name: Authorization to Sandbox
         run: |
-        sf org display --target-org ${{ secrets.SFDC_USERNAME_DEVELOPER_ORG }}
+        echo "${{ secrets.JWT_PRIVATE_KEY }}" > server.key
+        sfdx force:auth:jwt:grant --clientid ${{ secrets.SFDC_CONSUMER_KEY_DEVELOPER_ORG }} --jwtkeyfile ./server.key --username ${{ secrets.SFDC_SANDBOX_USERNAME_DEVELOPER_ORG }} --instanceurl ${{ secrets.SFDC_SANDBOX_URL }} --setdefaultdevhubusername -a sandbox
 
       - name: Deploy to Sandbox
         run: |
