@@ -18,12 +18,8 @@ jobs:
         with:
           node-version: 14
 
-
       - name: Install dependencies
         run: npm install
-
-      - name: Install the SFDX CLI
-        run: npm install @salesforce/cli --global
 
       - name: Build
         run: npm run build
