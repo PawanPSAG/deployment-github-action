@@ -14,13 +14,12 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Authorization to Sandbox
-        run: |
-        echo "${{ secrets.JWT_PRIVATE_KEY }}" > server.key
-        sfdx force:auth:jwt:grant --clientid ${{ secrets.SFDC_CONSUMER_KEY_DEVELOPER_ORG }} --jwtkeyfile ./server.key --username ${{ secrets.SFDC_SANDBOX_USERNAME_DEVELOPER_ORG }} --instanceurl ${{ secrets.SFDC_SANDBOX_URL }} --setdefaultdevhubusername -a sandbox
-
+        env:
+        DEPLOYMENT_API_KEY: ${{ secrets.DEPLOYMENT_API_KEY }}
+      
       - name: Deploy to Sandbox
         run: |
-          sfdx force:source:deploy -u sandbox -p force-app/main/default
+          ssh -i $DEPLOYMENT_API_KEY ${{ secrets.SFDC_SANDBOX_USERNAME_DEVELOPER_ORG }} sfdx force:source:deploy -u sandbox -p force-app/main/default
            # Add your deployment commands here
            # For example, if deploying to a server, use SSH or other deployment tools.
            # If deploying to a cloud service, use the respective CLI.
