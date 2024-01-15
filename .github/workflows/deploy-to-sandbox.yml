@@ -9,6 +9,11 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    - name: Install the SFDX CLI
+      run: |
+      npm install @salesforce/cli --global
+      sf --help
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
