@@ -1,9 +1,9 @@
-name: Deploy to Sandbox
+name: Deploy to Salesforce Sandbox
 
 on:
   push:
     branches:
-      - Developer
+      - main
 
 jobs:
   deploy:
@@ -13,21 +13,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 14
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build
-        run: npm run build
-
-      - name: Deploy to Sandbox
+      - name: Set up Salesforce CLI
         run: |
-          # Add your deployment commands here
-          sfdx force:source:deploy -u sandbox -p force-app/main/default
+          echo "Installing Salesforce CLI"
+          wget https://developer.salesforce.com/media/salesforce-cli/sfdx-cli/channels/stable/sfdx-cli-linux-x64.tar.xz
+          mkdir sfdx
+          tar xJf sfdx-cli-linux-x64.tar.xz -C sfdx --strip-components 1
+          export PATH=$PWD/sfdx/bin:$PATH
+          sfdx --version
 
-          # For example, if deploying to a server, use SSH or other deployment tools.
-          # If deploying to a cloud service, use the respective CLI.
+      - name: Authorize Salesforce Org
+        run: sfdx force:auth:jwt:grant --clientid ${{ secrets.SFDC_CONSUMER_KEY_DEVELOPER_ORG }} --jwtkeyfile ./path/to/server.key --username ${{ secrets.SFDC_USERNAME_DEVELOPER_ORG }} --setdefaultdevhubusername -a sfdc-sandbox
+
+      - name: Deploy to Salesforce Sandbox
+        run: sfdx force:source:deploy -u sfdc-sandbox -p force-app/main/default
+
