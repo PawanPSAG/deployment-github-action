@@ -15,7 +15,7 @@ jobs:
 
       - name: Deploy to Sandbox
         run: |
-          ssh ${{ secrets.SFDC_USERNAME_DEVELOPER_ORG }} '/Users/pawankumar/Documents/Project/deployment-github-action/manifest/package.xml'
+          sfdx force:source:deploy -u sandbox -p force-app/main/default
            # Add your deployment commands here
            # For example, if deploying to a server, use SSH or other deployment tools.
            # If deploying to a cloud service, use the respective CLI.
