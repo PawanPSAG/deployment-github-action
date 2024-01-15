@@ -1,0 +1,32 @@
+name: Deploy to Sandbox
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy to Sandbox
+        run: |
+          ssh ${{secret.SFDC_USERNAME_DEVELOPER_ORG}} ''
+           # Add your deployment commands here
+           # For example, if deploying to a server, use SSH or other deployment tools.
+           # If deploying to a cloud service, use the respective CLI.
