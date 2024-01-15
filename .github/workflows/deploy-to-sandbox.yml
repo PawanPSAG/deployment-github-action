@@ -23,3 +23,11 @@ jobs:
            # Add your deployment commands here
            # For example, if deploying to a server, use SSH or other deployment tools.
            # If deploying to a cloud service, use the respective CLI.
+      
+      - name: Run Tests in Sandbox
+      run: |
+        sfdx force:apex:test:run -u sandbox
+
+    - name: Disconnect from Sandbox
+      run: |
+        sfdx force:auth:logout -u sandbox     
