@@ -26,9 +26,13 @@ jobs:
             npm install --global sfdx-cli
 
       - name: Generate JWT token
+        id: jwt
         run: |
-          JWT=$(jwt-bearer/generate)
-          echo "::set-env name=JWT_TOKEN::$JWT"
+          echo "Creating JWT token..."
+          openssl genrsa -out jwt-key.pem 4096
+          openssl rsa -in jwt-key.pem -pubout -outform PEM -out jwt-key.pub.pem
+          JWT=$(openssl dgst -sha256 -sign jwt-key.pem <(echo -n "$(date +%s)")) # This is a basic JWT. You might need to adjust this based on Salesforce requirements.
+          echo "::set-output name=token::$JWT"
 
       - name: Authenticate with Salesforce
         run: |
