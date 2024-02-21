@@ -8,7 +8,7 @@ public class testing implements Database.Batchable<sObject>,Database.Stateful, D
         this.orderid = orderidSet;
         system.debug('orderidSet in batch-----'+orderidSet);
     }
-     //Card Psag_539 
+     //Card Psag_539 1
     public Database.QueryLocator start(Database.BatchableCOntext bc){
         List<TAD_Order__c> palsList = [SELECT Id,Name,Delacon_String__c,Delacon_Api_Status__c,Delacon_Sale_converted_Date__c,ordexp_master_status__c,ordexp_purchase_date__c FROM TAD_Order__c where Id =:orderid];
         system.debug('TadOrderList-----'+palsList);
