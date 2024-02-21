@@ -36,12 +36,12 @@ jobs:
       - name: Authenticate with Salesforce
         run: |
           sfdx force:auth:jwt:grant --clientid ${{ secrets.SFDC_CONSUMER_KEY_DEVELOPER_ORG }} \
-                                     --jwtkeyfile jwt-key.pem \
-                                     --username ${{ secrets.SFDC_USERNAME_DEVELOPER_ORG }} \
-                                     --setdefaultdevhubusername \
-                                     --instanceurl https://test.salesforce.com \
-                                     --setdefaultusername -a deploymentrun
-      
+                                    --jwtkeyfile jwt-key.pem \
+                                    --username ${{ secrets.SFDC_USERNAME_DEVELOPER_ORG }} \
+                                    --setdefaultdevhubusername \
+                                    --instanceurl https://test.salesforce.com \
+                                    --setdefaultusername -a deploymentrun
+
       - name: Deploy to Salesforce org
         run: |
           sfdx force:source:deploy --manifest=manifest/package.xml --testlevel=RunLocalTests -u ${{ secrets.SFDC_USERNAME_DEVELOPER_ORG }}
