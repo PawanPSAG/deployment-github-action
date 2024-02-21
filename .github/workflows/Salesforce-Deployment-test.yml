@@ -1,0 +1,32 @@
+name: Salesforce Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Salesforce CLI
+        uses: forcedotcom/sfdx-travisci@v1.1.0
+        with:
+          version: 'latest'
+
+      - name: Generate JWT token
+        run: |
+          JWT=$(jwt-bearer/generate)
+          echo "::set-env name=JWT_TOKEN::$JWT"
+
+      - name: Authenticate with Salesforce
+        run: |
+          sfdx force:auth:jwt:grant --clientid ${{ secrets.SFDC_CONSUMER_KEY_DEVELOPER_ORG }} --jwtkeyfile <(echo $JWT) --username ${{ secrets.SFDC_USERNAME_DEVELOPER_ORG }} --setdefaultdevhubusername -a <alias> -r ${{ secrets.SFDC_SANDBOX_URL }}
+
+      - name: Deploy to Salesforce org
+        run: |
+          sfdx force:source:deploy --manifest=manifest/package.xml --testlevel=RunLocalTests -u ${{ secrets.SFDC_USERNAME_DEVELOPER_ORG }}
